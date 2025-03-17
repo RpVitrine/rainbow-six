@@ -14,7 +14,7 @@ const OperatorData = () => {
     const [weaponDetails, setWeaponDetails] = useState({});
 
     useEffect(() => {
-        navigation.setOptions({ title: operator.name });
+        // navigation.setOptions({ title: operator.name });
         async function fetchData() {
             const data = await getOperatorData(operator.name);
             setOperatorData(data);
@@ -110,9 +110,9 @@ const OperatorData = () => {
             <ScrollView contentContainerStyle={styles.container}>
                 {/* Cabeçalho */}
                 <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+                    {/* <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                         <Text style={styles.backButtonText}>← Voltar</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <Image
                         source={{ uri: operatorData.images_logo || '' }}
                         style={styles.operatorIcon}
