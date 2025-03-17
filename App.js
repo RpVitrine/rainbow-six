@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ListOperators from './Page/ListOperators';
 import OperatorData from './Page/OperatorData';
 import Login from './Page/Login';
+import Registar from './Page/Registar';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,7 @@ export default function App() {
         <Stack.Screen name="ListOperators" component={ListOperators} options={{ title: "Operadores" }} />
         <Stack.Screen name="OperatorData" component={OperatorData} options={({ route }) => ({ title: route.params.operator.name })} />
         <Stack.Screen name="LoginPage" component={Login} options={{ title: "Login" }} />
+        <Stack.Screen name="RegisterPage" component={Registar} options={{ title: "Registar" }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
