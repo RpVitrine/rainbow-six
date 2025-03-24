@@ -1,15 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const Login = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Implemente a lógica de autenticação aqui
-    console.log('Login com:', email, password);
+  const handleLogin = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/login', {
+        headers: {
+          email: email,
+          password: password
+        }
+      });
+      Alert.alert('Sucesso', 'Login realizado com sucesso!');
+      console.log(response.data);
+      // navigation.navigate('Home'); // Redireciona conforme sua navegação
+    } catch (error) {
+      Alert.alert('Erro', error.response?.data?.error || 'Erro na autenticação');
+      console.error(error);
+    }
   };
 
   return (
