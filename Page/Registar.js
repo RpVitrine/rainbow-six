@@ -1,124 +1,200 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, Platform, Modal } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-const Register = () => {
+const Registar = () => {
   const navigation = useNavigation();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handleRegister = async () => {
     if (password !== confirmPassword) {
-      Alert.alert('Erro', 'As senhas não coincidem');
+      setErrorMessage('As senhas não coincidem');
+      setModalVisible(true);
       return;
     }
 
     try {
-      // Implemente a lógica de registro via API aqui.
-      // Exemplo:
-      // const response = await axios.post('http://seu-endpoint/register', { nome, email, password });
+      const response = await axios.post(
+        'http://localhost:5000/register',
+        { username: nome, email: email, password: password },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
       Alert.alert('Sucesso', 'Registro realizado com sucesso!');
-      // Após registro, redirecione para a tela de login:
-      // navigation.navigate('Login');
+      console.log(response.data);
+      navigation.navigate('LoginPage');
     } catch (error) {
-      Alert.alert('Erro', 'Falha ao registrar. Tente novamente.');
-      console.error(error);
+      console.log(error);
+      const errorMsg = error.response?.data?.error || 'Ocorreu um erro durante o registro. Tente novamente.';
+      setErrorMessage(errorMsg);
+      setModalVisible(true);
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.title}>Crie sua Conta</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Nome"
-          placeholderTextColor="#888"
-          value={nome}
-          onChangeText={setNome}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#888"
-          value={email}
-          onChangeText={setEmail}
-          autoCapitalize="none"
-          keyboardType="email-address"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Senha"
-          placeholderTextColor="#888"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Confirmar Senha"
-          placeholderTextColor="#888"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-        />
-        <TouchableOpacity style={styles.button} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Registrar</Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.safeContainer}>
+      <KeyboardAvoidingView 
+        style={styles.container} 
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      >
+        <View style={styles.card}>
+          <Text style={styles.title}>Crie sua Conta</Text>
+
+          <TextInput
+            style={styles.input}
+            placeholder="Nome"
+            placeholderTextColor="#999"
+            value={nome}
+            onChangeText={setNome}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#999"
+            value={email}
+            onChangeText={setEmail}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Senha"
+            placeholderTextColor="#999"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Confirmar Senha"
+            placeholderTextColor="#999"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
+            <Text style={styles.buttonText}>Registrar</Text>
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+
+      {/* Popup Modal para exibir mensagem de erro */}
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Erro</Text>
+            <Text style={styles.modalMessage}>{errorMessage}</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={() => setModalVisible(false)}>
+              <Text style={styles.modalButtonText}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
 
-export default Register;
+export default Registar;
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: '#EAF2F8',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#71b7e6',
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
     paddingHorizontal: 20,
   },
   card: {
     width: '100%',
+    maxWidth: 400,
     backgroundColor: '#fff',
-    borderRadius: 10,
-    paddingVertical: 40,
-    paddingHorizontal: 20,
+    borderRadius: 12,
+    padding: 20,
     shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowRadius: 10,
-    elevation: 5,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 8,
   },
   title: {
     fontSize: 28,
-    marginBottom: 30,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#333',
+    marginBottom: 25,
     textAlign: 'center',
   },
   input: {
+    width: '100%',
     height: 50,
-    borderColor: '#ccc',
-    borderWidth: 1,
+    backgroundColor: '#F2F2F2',
     borderRadius: 8,
     paddingHorizontal: 15,
-    marginBottom: 20,
     fontSize: 16,
     color: '#333',
+    marginBottom: 15,
   },
   button: {
-    backgroundColor: '#9b59b6',
+    backgroundColor: '#4CAF50',
     paddingVertical: 15,
     borderRadius: 8,
     alignItems: 'center',
+    marginVertical: 10,
   },
   buttonText: {
     color: '#fff',
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  // Estilos do Modal
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    maxWidth: 300,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#E74C3C',
+    marginBottom: 15,
+  },
+  modalMessage: {
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  modalButton: {
+    backgroundColor: '#E74C3C',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  modalButtonText: {
+    color: '#fff',
+    fontSize: 16,
     fontWeight: '600',
   },
 });
