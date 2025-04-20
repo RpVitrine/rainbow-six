@@ -1,27 +1,35 @@
-## Funcionalidades
+<!-- README.md for rainbow-six -->
+# Rainbow Six Front‑End App
 
-- ✅ Lista completa de **operadores do R6**
-- 🔍 Visualização detalhada de:
-  - Armas principais e secundárias
-  - Gadgets disponíveis
-  - Habilidade única de cada operador
-- ⭐ Sistema de **favoritos** para marcar os teus operadores preferidos
-- 👤 Funcionalidade de **criação de conta** para guardar os teus favoritos
+Aplicação front‑end em JavaScript que permite consultar todos os operadores do jogo **Rainbow Six**, exibindo:
+
+- Armas principais e secundárias  
+- Gadgets disponíveis  
+- Habilidade única de cada operador  
+
+Inclui também:
+
+- ⭐ Sistema de favoritos para marcar operadores preferidos  
+- 👤 (Opcional) Criação de conta para guardar favoritos  
+
+A aplicação consome dados da API Python disponível em [rainbow-six-API](https://github.com/RpVitrine/rainbow-six-API).
 
 ---
 
-## API
+## Instalação e Execução
 
-- API criada em Python utilizando a biblioteca **Flask**
-
----
-
-## Instalação
-
-1. Clona o repositório:
+1. **Clone este repositório**  
    ```bash
-   git clone https://github.com/RpVitrine/rainbow-six
-
-2. Clona o repositório da API:
+   git clone https://github.com/RpVitrine/rainbow-six.git
+   
+2. **Acesse a pasta do projeto**  
    ```bash
-   git clone https://github.com/RpVitrine/rainbow-six-API
+   cd rainbow-six
+
+3. **Instale as dependências**  
+   ```bash
+   npm install
+
+4. **Inicie a aplicação**
+   ```bash
+   npm run web
