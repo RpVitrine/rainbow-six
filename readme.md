@@ -29,6 +29,7 @@ A aplicação consome dados da API Python disponível em [rainbow-six-API](https
 3. **Instale as dependências**  
    ```bash
    npm install
+   npm install axios
 
 4. **Inicie a aplicação**
    ```bash
